@@ -2,7 +2,7 @@
 
 A simple, easy-to-use web interface for generating high-quality audio from text using OpenAI's Text-to-Speech (TTS) API. This tool allows you to input text, select a voice, and download the resulting audio in various formats.
 
-![Screenshot of the AI Text-to-Speech Generator](https://i.imgur.com/your-screenshot.png) <!-- Replace with a real screenshot URL -->
+![Screenshot of the AI Text-to-Speech Generator](screenshot.png)
 
 ## ✨ Features
 
