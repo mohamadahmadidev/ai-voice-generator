@@ -53,6 +53,26 @@
                 <input type="password" id="apiKey" name="apiKey" class="w-full px-4 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" placeholder="Enter your OpenAI API Key" required>
             </div>
 
+            <!-- Instruction Template Selection -->
+            <div>
+                <label for="instructionTemplate" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Instruction Template</label>
+                <select id="instructionTemplate" class="w-full px-4 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
+                    <option value="">Select a Template</option>
+                    <option value="patientTeacher">Patient Teacher</option>
+                    <option value="chillSurfer">Chill Surfer</option>
+                    <option value="calm">Calm</option>
+                    <option value="medievalKnight">Medieval Knight</option>
+                    <option value="bedtimeStory">Bedtime Story</option>
+                    <option value="cowboy">Cowboy</option>
+                </select>
+            </div>
+
+            <!-- Instruction Input -->
+            <div>
+                <label for="instructions" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Instructions (Tone, Cadence, etc.)</label>
+                <textarea id="instructions" name="instructions" rows="4" class="w-full px-4 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" placeholder="e.g., Speak in a cheerful and positive tone."></textarea>
+            </div>
+
             <!-- Text Input -->
             <div>
                 <label for="text" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Text to Convert</label>
@@ -113,6 +133,8 @@
         // Get references to all the necessary DOM elements
         const ttsForm = document.getElementById('ttsForm');
         const apiKeyInput = document.getElementById('apiKey');
+        const instructionTemplateSelect = document.getElementById('instructionTemplate');
+        const instructionsInput = document.getElementById('instructions');
         const textInput = document.getElementById('text');
         const voiceSelect = document.getElementById('voice');
         const formatSelect = document.getElementById('format');
@@ -124,6 +146,51 @@
         const downloadLink = document.getElementById('downloadLink');
         const errorMessage = document.getElementById('errorMessage');
 
+        const instructionTemplates = {
+            patientTeacher: `Accent/Affect: Warm, refined, and gently instructive, reminiscent of a friendly art instructor.
+Tone: Calm, encouraging, and articulate, clearly describing each step with patience.
+Pacing: Slow and deliberate, pausing often to allow the listener to follow instructions comfortably.
+Emotion: Cheerful, supportive, and pleasantly enthusiastic; convey genuine enjoyment and appreciation of art.
+Pronunciation: Clearly articulate artistic terminology (e.g., "brushstrokes," "landscape," "palette") with gentle emphasis.
+Personality Affect: Friendly and approachable with a hint of sophistication; speak confidently and reassuringly, guiding users through each painting step patiently and warmly.`,
+            chillSurfer: `Voice: Laid-back, mellow, and effortlessly cool, like a surfer who's never in a rush.
+Tone: Relaxed and reassuring, keeping things light even when the customer is frustrated.
+Speech Mannerisms: Uses casual, friendly phrasing with surfer slang like dude, gnarly, and boom to keep the conversation chill.
+Pronunciation: Soft and drawn-out, with slightly stretched vowels and a naturally wavy rhythm in speech.
+Tempo: Slow and easygoing, with a natural flow that never feels rushed, creating a calming effect.`,
+            calm: `Voice Affect: Calm, composed, and reassuring; project quiet authority and confidence.
+Tone: Sincere, empathetic, and gently authoritative—express genuine apology while conveying competence.
+Pacing: Steady and moderate; unhurried enough to communicate care, yet efficient enough to demonstrate professionalism.
+Emotion: Genuine empathy and understanding; speak with warmth, especially during apologies ("I'm very sorry for any disruption...").
+Pronunciation: Clear and precise, emphasizing key reassurances ("smoothly," "quickly," "promptly") to reinforce confidence.
+Pauses: Brief pauses after offering assistance or requesting details, highlighting willingness to listen and support.`,
+            medievalKnight: `Affect: Deep, commanding, and slightly dramatic, with an archaic and reverent quality that reflects the grandeur of Olde English storytelling.
+Tone: Noble, heroic, and formal, capturing the essence of medieval knights and epic quests, while reflecting the antiquated charm of Olde English.
+Emotion: Excitement, anticipation, and a sense of mystery, combined with the seriousness of fate and duty.
+Pronunciation: Clear, deliberate, and with a slightly formal cadence. Specific words like "hast," "thou," and "doth" should be pronounced slowly and with emphasis to reflect Olde English speech patterns.
+Pause: Pauses after important Olde English phrases such as "Lo!" or "Hark!" and between clauses like "Choose thy path" to add weight to the decision-making process and allow the listener to reflect on the seriousness of the quest.`,
+            bedtimeStory: `Affect: A gentle, curious narrator with a British accent, guiding a magical, child-friendly adventure through a fairy tale world.
+Tone: Magical, warm, and inviting, creating a sense of wonder and excitement for young listeners.
+Pacing: Steady and measured, with slight pauses to emphasize magical moments and maintain the storytelling flow.
+Emotion: Wonder, curiosity, and a sense of adventure, with a lighthearted and positive vibe throughout.
+Pronunciation: Clear and precise, with an emphasis on storytelling, ensuring the words are easy to follow and enchanting to listen to.`,
+            cowboy: `Voice: Warm, relaxed, and friendly, with a steady cowboy drawl that feels approachable.
+Punctuation: Light and natural, with gentle pauses that create a conversational rhythm without feeling rushed.
+Delivery: Smooth and easygoing, with a laid-back pace that reassures the listener while keeping things clear.
+Phrasing: Simple, direct, and folksy, using casual, familiar language to make technical support feel more personable.
+Tone: Lighthearted and welcoming, with a calm confidence that puts the caller at ease.`
+        };
+
+        // Event listener for the instruction template dropdown
+        instructionTemplateSelect.addEventListener('change', (event) => {
+            const selectedTemplate = event.target.value;
+            if (instructionTemplates[selectedTemplate]) {
+                instructionsInput.value = instructionTemplates[selectedTemplate];
+            } else {
+                instructionsInput.value = '';
+            }
+        });
+
         // Restore API key from localStorage on page load
         apiKeyInput.value = localStorage.getItem('openai_api_key') || '';
 
@@ -133,6 +200,7 @@
 
             // Get values from the form
             const apiKey = apiKeyInput.value.trim();
+            const instructions = instructionsInput.value.trim();
             const text = textInput.value.trim();
             const voice = voiceSelect.value;
             const format = formatSelect.value;
@@ -162,6 +230,12 @@
                     voice: voice,
                     response_format: format
                 };
+
+                // Add instructions to the payload if provided.
+                // Note: 'instructions' is not a standard parameter for the OpenAI TTS API and may be ignored.
+                if (instructions) {
+                    payload.instructions = instructions;
+                }
 
                 // Make the API call to OpenAI's audio speech endpoint
                 const response = await fetch('https://api.openai.com/v1/audio/speech', {
