@@ -8,7 +8,9 @@ A simple, easy-to-use web interface for generating high-quality audio from text 
 
 * **Simple Interface**: Clean and intuitive UI built with Tailwind CSS.
 * **High-Quality Audio**: Uses the `tts-1-hd` model for high-definition audio.
-* **Voice Selection**: Choose from a variety of OpenAI's built-in voices.
+* **Instruction Templates**: Choose from pre-defined instruction templates (e.g., Patient Teacher, Chill Surfer, Medieval Knight) to guide the voice's tone and cadence.
+* **Custom Instructions**: Write your own detailed instructions for the voice model.
+* **Voice Selection**: Choose from all available voices: Alloy, Ash, Ballad, Coral, Echo, Fable, Nova, Onyx, Sage, and Shimmer.
 * **Multiple Formats**: Download the generated audio in MP3, OPUS, AAC, or FLAC.
 * **API Key Management**: Your API key is saved locally in your browser's `localStorage` for convenience.
 * **Audio Preview**: Listen to the generated audio directly in the browser before downloading.
@@ -37,10 +39,11 @@ You need a modern web browser and an API key from OpenAI.
 
 1.  Open `index.html` in your browser.
 2.  Enter your OpenAI API Key in the input field.
-3.  Enter the text you want to convert to speech.
-4.  Select the desired voice and output format.
-5.  Click "Generate Audio".
-6.  The audio will be generated and you can preview it or download the file.
+3.  (Optional) Select an instruction template or write your own custom instructions.
+4.  Enter the text you want to convert to speech.
+5.  Select the desired voice and output format.
+6.  Click "Generate Audio".
+7.  The audio will be generated and you can preview it or download the file.
 
 ## 🤝 Contributing
 
